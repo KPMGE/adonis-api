@@ -8,7 +8,7 @@ export default class Address extends BaseModel {
   declare id: number
 
   @column()
-  declare streetAddress: string
+  declare street: string
 
   @column()
   declare county: string
