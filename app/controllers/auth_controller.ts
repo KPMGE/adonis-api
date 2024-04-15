@@ -11,7 +11,12 @@ export default class AuthController {
     return token
   }
 
-  async login({}: HttpContext) {}
+  async login({ request, auth }: HttpContext) {
+    const { email, password } = request.only(['email', 'password'])
 
-  async logout({}: HttpContext) {}
+    const user = await User.verifyCredentials(email, password)
+
+    const token = await auth.use('jwt').generate(user)
+    return token
+  }
 }
