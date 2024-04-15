@@ -11,7 +11,7 @@ export default class Address extends BaseModel {
   declare street: string
 
   @column()
-  declare county: string
+  declare country: string
 
   @column()
   declare state: string
