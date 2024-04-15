@@ -1,5 +1,7 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@adonisjs/lucid/orm'
+import { BaseModel, column, hasOne } from '@adonisjs/lucid/orm'
+import Address from './address.js'
+import type { HasOne } from '@adonisjs/lucid/types/relations'
 
 export default class Client extends BaseModel {
   @column({ isPrimary: true })
@@ -10,6 +12,9 @@ export default class Client extends BaseModel {
 
   @column()
   declare cpf: string
+
+  @hasOne(() => Address)
+  declare address: HasOne<typeof Address>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

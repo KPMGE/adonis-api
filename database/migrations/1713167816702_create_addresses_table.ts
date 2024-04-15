@@ -12,7 +12,7 @@ export default class extends BaseSchema {
       table.string('state').notNullable()
       table.string('city').notNullable()
       table.string('postal_code', 10).notNullable()
-      table.integer('user_id').unsigned().references('id').inTable('users').onDelete('cascade')
+      table.integer('client_id').unsigned().references('id').inTable('clients').onDelete('cascade')
 
       table.timestamp('created_at')
       table.timestamp('updated_at')
