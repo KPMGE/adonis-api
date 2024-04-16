@@ -13,6 +13,7 @@ router.post('/clients', [ClientsController, 'store'])
 router.delete('/clients/:clientId', [ClientsController, 'delete'])
 
 router.get('/products', [ProductsController, 'index'])
+router.get('/products/:productId', [ProductsController, 'show'])
 router.post('/products', [ProductsController, 'store'])
 router.delete('/products/:productId', [ProductsController, 'delete'])
 

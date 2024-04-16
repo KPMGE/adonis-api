@@ -19,6 +19,12 @@ export default class ProductsController {
     return ResponseStatus.Created
   }
 
+  async show({ request }: HttpContext) {
+    const { productId } = request.params()
+    const product = Product.find(productId)
+    return product
+  }
+
   async delete({ request }: HttpContext) {
     const { productId } = request.params()
 
