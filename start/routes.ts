@@ -8,8 +8,9 @@ const SalesController = () => import('#controllers/sales_controller')
 router.post('/signin', [AuthController, 'signup'])
 router.post('/login', [AuthController, 'login'])
 
-router.post('/clients', [ClientsController, 'store'])
 router.get('/clients', [ClientsController, 'index'])
+router.post('/clients', [ClientsController, 'store'])
+router.delete('/clients/:clientId', [ClientsController, 'delete'])
 
 router.get('/products', [ProductsController, 'index'])
 router.post('/products', [ProductsController, 'store'])

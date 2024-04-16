@@ -27,4 +27,13 @@ export default class ClientsController {
 
     return ResponseStatus.Created
   }
+
+  async delete({ request }: HttpContext) {
+    const { clientId } = request.params()
+    const client = await Client.find(clientId)
+
+    if (!client) return ResponseStatus.NotFound
+
+    await client.delete()
+  }
 }
