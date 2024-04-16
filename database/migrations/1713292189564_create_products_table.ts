@@ -11,6 +11,7 @@ export default class extends BaseSchema {
       table.string('description')
       table.string('brand').notNullable()
       table.string('color').notNullable()
+      table.boolean('active').defaultTo(true)
       table.decimal('price', 10, 2).notNullable()
 
       table.timestamp('created_at')

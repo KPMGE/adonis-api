@@ -18,6 +18,9 @@ export default class Product extends BaseModel {
   declare color: string
 
   @column()
+  declare active: boolean
+
+  @column()
   declare brand: string
 
   @column.dateTime({ autoCreate: true })

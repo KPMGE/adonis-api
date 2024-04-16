@@ -4,7 +4,7 @@ import { ResponseStatus, type HttpContext } from '@adonisjs/core/http'
 
 export default class ProductsController {
   async index() {
-    const products = await Product.query().orderBy('name')
+    const products = await Product.query().where('active', true).orderBy('name')
     return products
   }
 
@@ -14,5 +14,15 @@ export default class ProductsController {
     const data = request.all()
     await Product.create(data)
     return ResponseStatus.Created
+  }
+
+  async delete({ request }: HttpContext) {
+    const { productId } = request.params()
+
+    const product = await Product.find(productId)
+    if (!product) return ResponseStatus.NotFound
+
+    product.active = false
+    await product.save()
   }
 }
