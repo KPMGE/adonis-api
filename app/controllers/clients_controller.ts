@@ -5,6 +5,11 @@ import { createClientValidator } from '#validators/client'
 import { ResponseStatus, type HttpContext } from '@adonisjs/core/http'
 
 export default class ClientsController {
+  async index() {
+    const clients = await Client.query().orderBy('id')
+    return clients
+  }
+
   async store({ request }: HttpContext) {
     await createClientValidator.validate(request.all())
 
