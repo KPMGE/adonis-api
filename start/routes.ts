@@ -11,6 +11,7 @@ router.post('/login', [AuthController, 'login'])
 router.post('/clients', [ClientsController, 'store'])
 router.get('/clients', [ClientsController, 'index'])
 
+router.get('/products', [ProductsController, 'index'])
 router.post('/products', [ProductsController, 'store'])
 
 router.post('/sales', [SalesController, 'store'])
