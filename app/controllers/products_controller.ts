@@ -4,7 +4,10 @@ import { ResponseStatus, type HttpContext } from '@adonisjs/core/http'
 
 export default class ProductsController {
   async index() {
-    const products = await Product.query().where('active', true).orderBy('name')
+    const products = await Product.query()
+      .select(['id', 'name', 'price'])
+      .where('active', true)
+      .orderBy('name')
     return products
   }
 
