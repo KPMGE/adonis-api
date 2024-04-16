@@ -4,7 +4,9 @@ export const createClientValidator = vine.compile(
   vine.object({
     name: vine.string(),
     cpf: vine.string().regex(/\d{3}\.\d{3}\.\d{3}\-\d{2}/),
-    phones: vine.array(vine.string()),
+    phones: vine.array(
+      vine.string().regex(/([+55]{3})([(]?[0]?[1-9]{2}[)]?)[9]?([1-9]{4})-?([0-9]{4})/)
+    ),
     address: vine.object({
       country: vine.string(),
       state: vine.string(),
