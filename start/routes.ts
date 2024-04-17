@@ -9,6 +9,7 @@ router.post('/signin', [AuthController, 'signup'])
 router.post('/login', [AuthController, 'login'])
 
 router.get('/clients', [ClientsController, 'index'])
+router.get('/clients/:clientId', [ClientsController, 'show'])
 router.post('/clients', [ClientsController, 'store'])
 router.delete('/clients/:clientId', [ClientsController, 'delete'])
 

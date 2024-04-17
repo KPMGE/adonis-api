@@ -28,6 +28,28 @@ export default class ClientsController {
     return ResponseStatus.Created
   }
 
+  async show({ request }: HttpContext) {
+    const { clientId } = request.params()
+    const { year, month } = request.qs()
+
+    let query = Client.query()
+      .preload('phones')
+      .preload('address')
+      .preload('sales')
+      .where('id', clientId)
+
+    if (year) {
+      query = query.andWhereRaw('YEAR(clients.created_at) = :year:', { year: Number(year) })
+    }
+
+    if (month) {
+      query = query.andWhereRaw('MONTH(clients.created_at) = :month:', { month: Number(month) })
+    }
+
+    const clients = await query
+    return clients
+  }
+
   async delete({ request }: HttpContext) {
     const { clientId } = request.params()
     const client = await Client.find(clientId)
