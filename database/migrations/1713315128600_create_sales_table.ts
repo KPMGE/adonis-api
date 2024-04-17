@@ -10,6 +10,8 @@ export default class extends BaseSchema {
       table.integer('client_id').unsigned().references('id').inTable('clients').onDelete('CASCADE')
       table.integer('product_id').unsigned().references('id').inTable('products')
       table.integer('amount').unsigned().notNullable()
+      table.integer('unitary_price').unsigned().notNullable()
+      table.integer('total_price').unsigned().notNullable()
 
       table.timestamp('created_at')
       table.timestamp('updated_at')

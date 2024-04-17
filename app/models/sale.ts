@@ -12,6 +12,12 @@ export default class Sale extends BaseModel {
   declare amount: number
 
   @column()
+  declare unitaryPrice: number
+
+  @column()
+  declare totalPrice: number
+
+  @column()
   declare clientId: number
 
   @belongsTo(() => Client)
