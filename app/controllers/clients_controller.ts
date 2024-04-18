@@ -56,13 +56,16 @@ export default class ClientsController {
     return clients
   }
 
-  async delete({ request }: HttpContext) {
+  async delete({ request, response }: HttpContext) {
     const { clientId } = request.params()
     await request.validateUsing(deleteClientValidator)
 
     const client = await Client.find(clientId)
 
-    if (!client) return ResponseStatus.NotFound
+    if (!client) {
+      response.abort({ message: 'client not found' }, ResponseStatus.NotFound)
+      return
+    }
 
     await client.delete()
   }
