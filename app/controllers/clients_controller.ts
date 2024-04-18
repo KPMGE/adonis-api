@@ -32,7 +32,7 @@ export default class ClientsController {
     return ResponseStatus.Created
   }
 
-  async show({ request }: HttpContext) {
+  async show({ request, response }: HttpContext) {
     const { clientId } = request.params()
     const { year, month } = request.qs()
 
@@ -52,8 +52,14 @@ export default class ClientsController {
       query = query.andWhereRaw('MONTH(clients.created_at) = :month:', { month: Number(month) })
     }
 
-    const clients = await query
-    return clients
+    const client = await query.first()
+
+    if (!client) {
+      response.abort({ message: 'client not found' }, ResponseStatus.NotFound)
+      return
+    }
+
+    return client
   }
 
   async delete({ request, response }: HttpContext) {
