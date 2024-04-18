@@ -9,3 +9,19 @@ export const createProductValidator = vine.compile(
     price: vine.number().positive(),
   })
 )
+
+export const getProductValidator = vine.compile(
+  vine.object({
+    params: vine.object({
+      productId: vine.number().positive(),
+    }),
+  })
+)
+
+export const deleteProductValidator = vine.compile(
+  vine.object({
+    params: vine.object({
+      productId: vine.number().positive(),
+    }),
+  })
+)

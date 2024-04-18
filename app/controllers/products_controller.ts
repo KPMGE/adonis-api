@@ -1,5 +1,9 @@
 import Product from '#models/product'
-import { createProductValidator } from '#validators/product'
+import {
+  createProductValidator,
+  deleteProductValidator,
+  getProductValidator,
+} from '#validators/product'
 import { ResponseStatus, type HttpContext } from '@adonisjs/core/http'
 
 export default class ProductsController {
@@ -20,12 +24,16 @@ export default class ProductsController {
   }
 
   async show({ request }: HttpContext) {
+    await request.validateUsing(getProductValidator)
+
     const { productId } = request.params()
     const product = Product.find(productId)
     return product
   }
 
   async delete({ request }: HttpContext) {
+    await request.validateUsing(deleteProductValidator)
+
     const { productId } = request.params()
 
     const product = await Product.find(productId)
