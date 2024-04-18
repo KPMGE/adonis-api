@@ -23,21 +23,31 @@ export default class ProductsController {
     return ResponseStatus.Created
   }
 
-  async show({ request }: HttpContext) {
+  async show({ request, response }: HttpContext) {
     await request.validateUsing(getProductValidator)
 
     const { productId } = request.params()
     const product = Product.find(productId)
+
+    if (!product) {
+      response.abort({ message: 'product not found' }, ResponseStatus.NotFound)
+      return
+    }
+
     return product
   }
 
-  async delete({ request }: HttpContext) {
+  async delete({ request, response }: HttpContext) {
     await request.validateUsing(deleteProductValidator)
 
     const { productId } = request.params()
 
     const product = await Product.find(productId)
-    if (!product) return ResponseStatus.NotFound
+
+    if (!product) {
+      response.abort({ message: 'product not found' }, ResponseStatus.NotFound)
+      return
+    }
 
     product.active = false
     await product.save()
