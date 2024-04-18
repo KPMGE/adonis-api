@@ -24,3 +24,11 @@ export const getClientValidator = vine.compile(
     }),
   })
 )
+
+export const deleteClientValidator = vine.compile(
+  vine.object({
+    params: vine.object({
+      clientId: vine.number().positive(),
+    }),
+  })
+)
