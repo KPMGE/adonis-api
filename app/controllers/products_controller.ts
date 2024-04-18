@@ -27,7 +27,7 @@ export default class ProductsController {
     await request.validateUsing(getProductValidator)
 
     const { productId } = request.params()
-    const product = Product.find(productId)
+    const product = await Product.find(productId)
 
     if (!product) {
       response.abort({ message: 'product not found' }, ResponseStatus.NotFound)
