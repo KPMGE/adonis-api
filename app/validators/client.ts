@@ -16,3 +16,11 @@ export const createClientValidator = vine.compile(
     }),
   })
 )
+
+export const getClientValidator = vine.compile(
+  vine.object({
+    params: vine.object({
+      clientId: vine.number().positive(),
+    }),
+  })
+)

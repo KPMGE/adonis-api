@@ -1,7 +1,7 @@
 import Address from '#models/address'
 import Client from '#models/client'
 import Phone from '#models/phone'
-import { createClientValidator } from '#validators/client'
+import { createClientValidator, getClientValidator } from '#validators/client'
 import { ResponseStatus, type HttpContext } from '@adonisjs/core/http'
 
 export default class ClientsController {
@@ -31,6 +31,8 @@ export default class ClientsController {
   async show({ request }: HttpContext) {
     const { clientId } = request.params()
     const { year, month } = request.qs()
+
+    await request.validateUsing(getClientValidator)
 
     let query = Client.query()
       .preload('phones')
