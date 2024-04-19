@@ -10,7 +10,9 @@ import { ResponseStatus, type HttpContext } from '@adonisjs/core/http'
 
 export default class ClientsController {
   async index() {
-    const clients = await Client.query().orderBy('id')
+    const clients = await Client.query()
+      .select(['id', 'name', 'createdAt', 'updatedAt'])
+      .orderBy('id')
     return clients
   }
 
