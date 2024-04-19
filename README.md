@@ -17,3 +17,8 @@ too, so don't worry about it.
 
 After a little while, everything should be up and running. The api will be
 running by default on the port 3333. Now you can start playing with it! :rocket:
+
+
+## Documentation
+You can find more information about the routes and how to use them in the
+[docs](https://github.com/KPMGE/adonis-api/tree/main/docs)
