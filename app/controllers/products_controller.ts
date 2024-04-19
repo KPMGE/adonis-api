@@ -3,6 +3,7 @@ import {
   createProductValidator,
   deleteProductValidator,
   getProductValidator,
+  updateProductValidator,
 } from '#validators/product'
 import { ResponseStatus, type HttpContext } from '@adonisjs/core/http'
 
@@ -37,13 +38,26 @@ export default class ProductsController {
     return product
   }
 
+  async update({ request, response }: HttpContext) {
+    await request.validateUsing(updateProductValidator)
+    const { productId } = request.params()
+
+    const product = await Product.find(productId)
+    if (!product) {
+      response.abort({ message: 'product not found' }, ResponseStatus.NotFound)
+      return
+    }
+
+    const newProduct = request.only(['name', 'description', 'color', 'brand', 'price'])
+    await product.merge({ ...newProduct }).save()
+  }
+
   async delete({ request, response }: HttpContext) {
     await request.validateUsing(deleteProductValidator)
 
     const { productId } = request.params()
 
     const product = await Product.find(productId)
-
     if (!product) {
       response.abort({ message: 'product not found' }, ResponseStatus.NotFound)
       return

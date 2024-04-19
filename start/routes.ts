@@ -22,6 +22,7 @@ router
         router.get('/products', [ProductsController, 'index'])
         router.get('/products/:productId', [ProductsController, 'show'])
         router.post('/products', [ProductsController, 'store'])
+        router.patch('/products/:productId', [ProductsController, 'update'])
         router.delete('/products/:productId', [ProductsController, 'delete'])
 
         router.post('/sales', [SalesController, 'store'])
