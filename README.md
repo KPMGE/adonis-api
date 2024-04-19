@@ -4,8 +4,30 @@ This is a simple api made with [adonis](https://adonisjs.com/).
 
 ## How to run it? :running:
 The easiest way to run this api is by using [docker](https://www.docker.com/).
-If you've already installed it, running this api is as simple as running the
-following command on the project's root directory:
+Make sure to have it properly set up before going further!
+
+### Seting up environment
+Before running the api, you need to set up some environment variables for
+this api. You can use the default ones and change them later according to your
+needs.
+
+First, create a **.env** file at the root directory:
+
+```bash
+touch .env
+```
+
+Then, copy the contents of the example env file into that file:
+
+```bash
+cat .env.example >> .env
+```
+
+Now everything should be fine. You can change those configurations later if
+needed.
+
+
+Running the api now is as simple as executing the command:
 
 ```bash
 sudo docker-compose up
