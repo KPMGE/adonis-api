@@ -23,11 +23,9 @@ export default class ClientsController {
 
     const client = await Client.create(userData)
     const crateAddressPromise = Address.create({ ...addressData, clientId: client.id })
-    const createPhonesPromise = phones.map((phone) =>
-      Phone.create({ clientId: client.id, number: phone })
-    )
+    const createPhonesPromise = this.insertPhones(client.id, phones)
 
-    await Promise.all([crateAddressPromise, ...createPhonesPromise])
+    await Promise.all([crateAddressPromise, createPhonesPromise])
 
     return ResponseStatus.Created
   }
@@ -62,6 +60,37 @@ export default class ClientsController {
     return client
   }
 
+  async update({ request, response }: HttpContext) {
+    const { clientId } = request.params()
+    const client = await Client.find(clientId)
+
+    if (!client) {
+      response.abort({ message: 'client not found' }, ResponseStatus.NotFound)
+      return
+    }
+
+    const { name } = request.only(['name'])
+    const { address } = request.only(['address'])
+    const { phones } = request.only(['phones'])
+
+    if (name) {
+      client.merge({ name })
+    }
+
+    if (address) {
+      const clientAddress = await Address.findBy({ clientId: client.id })
+      clientAddress?.merge({ ...address })
+      clientAddress?.save()
+    }
+
+    if (phones) {
+      this.deleteAllPhones(client.id)
+      await this.insertPhones(client.id, phones)
+    }
+
+    await client.save()
+  }
+
   async delete({ request, response }: HttpContext) {
     const { clientId } = request.params()
     await request.validateUsing(deleteClientValidator)
@@ -74,5 +103,14 @@ export default class ClientsController {
     }
 
     await client.delete()
+  }
+
+  private async deleteAllPhones(clientId: number) {
+    const phones = await Phone.findManyBy({ clientId })
+    phones.forEach((phone) => phone.delete())
+  }
+
+  private async insertPhones(clientId: number, phones: string[]) {
+    phones.map((number) => Phone.create({ clientId, number }))
   }
 }

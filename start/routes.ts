@@ -16,6 +16,7 @@ router
         router.get('/clients', [ClientsController, 'index'])
         router.get('/clients/:clientId', [ClientsController, 'show'])
         router.post('/clients', [ClientsController, 'store'])
+        router.patch('/clients/:clientId', [ClientsController, 'update'])
         router.delete('/clients/:clientId', [ClientsController, 'delete'])
 
         router.get('/products', [ProductsController, 'index'])
