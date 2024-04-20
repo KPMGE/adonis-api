@@ -25,8 +25,11 @@ export default class ClientsController {
     const phones: string[] = request.only(['phones']).phones
 
     const client = await Client.create(userData)
-    const crateAddressPromise = Address.create({ ...addressData, clientId: client.id })
-    const createPhonesPromise = this.insertPhones(client.id, phones)
+
+    const crateAddressPromise = client.related('address').create(addressData)
+    const createPhonesPromise = client
+      .related('phones')
+      .createMany(phones.map((number) => ({ number })))
 
     await Promise.all([crateAddressPromise, createPhonesPromise])
 
