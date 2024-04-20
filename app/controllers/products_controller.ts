@@ -1,3 +1,4 @@
+import ProductNotFoundException from '#exceptions/product_not_found_exception'
 import Product from '#models/product'
 import {
   createProductValidator,
@@ -24,44 +25,33 @@ export default class ProductsController {
     return ResponseStatus.Created
   }
 
-  async show({ request, response }: HttpContext) {
+  async show({ request }: HttpContext) {
     await request.validateUsing(getProductValidator)
 
     const { productId } = request.params()
     const product = await Product.find(productId)
-
-    if (!product) {
-      response.abort({ message: 'product not found' }, ResponseStatus.NotFound)
-      return
-    }
+    if (!product) throw new ProductNotFoundException()
 
     return product
   }
 
-  async update({ request, response }: HttpContext) {
+  async update({ request }: HttpContext) {
     await request.validateUsing(updateProductValidator)
-    const { productId } = request.params()
 
+    const { productId } = request.params()
     const product = await Product.find(productId)
-    if (!product) {
-      response.abort({ message: 'product not found' }, ResponseStatus.NotFound)
-      return
-    }
+    if (!product) throw new ProductNotFoundException()
 
     const newProduct = request.only(['name', 'description', 'color', 'brand', 'price'])
     await product.merge({ ...newProduct }).save()
   }
 
-  async delete({ request, response }: HttpContext) {
+  async delete({ request }: HttpContext) {
     await request.validateUsing(deleteProductValidator)
 
     const { productId } = request.params()
-
     const product = await Product.find(productId)
-    if (!product) {
-      response.abort({ message: 'product not found' }, ResponseStatus.NotFound)
-      return
-    }
+    if (!product) throw new ProductNotFoundException()
 
     product.active = false
     await product.save()
