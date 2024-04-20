@@ -1,3 +1,4 @@
+import ClientNotFoundException from '#exceptions/client_not_found_exception'
 import Address from '#models/address'
 import Client from '#models/client'
 import Phone from '#models/phone'
@@ -36,7 +37,7 @@ export default class ClientsController {
     return ResponseStatus.Created
   }
 
-  async show({ request, response }: HttpContext) {
+  async show({ request }: HttpContext) {
     const { clientId } = request.params()
     const { year, month } = request.qs()
 
@@ -57,25 +58,17 @@ export default class ClientsController {
     }
 
     const client = await query.first()
-
-    if (!client) {
-      response.abort({ message: 'client not found' }, ResponseStatus.NotFound)
-      return
-    }
+    if (!client) throw new ClientNotFoundException()
 
     return client
   }
 
-  async update({ request, response }: HttpContext) {
+  async update({ request }: HttpContext) {
     await request.validateUsing(updateClientValidator)
 
     const { clientId } = request.params()
     const client = await Client.find(clientId)
-
-    if (!client) {
-      response.abort({ message: 'client not found' }, ResponseStatus.NotFound)
-      return
-    }
+    if (!client) throw new ClientNotFoundException()
 
     const { name } = request.only(['name'])
     const { address } = request.only(['address'])
@@ -99,16 +92,12 @@ export default class ClientsController {
     await client.save()
   }
 
-  async delete({ request, response }: HttpContext) {
+  async delete({ request }: HttpContext) {
     const { clientId } = request.params()
     await request.validateUsing(deleteClientValidator)
 
     const client = await Client.find(clientId)
-
-    if (!client) {
-      response.abort({ message: 'client not found' }, ResponseStatus.NotFound)
-      return
-    }
+    if (!client) throw new ClientNotFoundException()
 
     await client.delete()
   }
