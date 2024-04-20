@@ -1,7 +1,5 @@
 import ClientNotFoundException from '#exceptions/client_not_found_exception'
-import Address from '#models/address'
 import Client from '#models/client'
-import Phone from '#models/phone'
 import {
   createClientValidator,
   deleteClientValidator,
@@ -38,10 +36,10 @@ export default class ClientsController {
   }
 
   async show({ request }: HttpContext) {
+    await request.validateUsing(getClientValidator)
+
     const { clientId } = request.params()
     const { year, month } = request.qs()
-
-    await request.validateUsing(getClientValidator)
 
     let query = Client.query()
       .preload('phones')
@@ -79,14 +77,12 @@ export default class ClientsController {
     }
 
     if (address) {
-      const clientAddress = await Address.findBy({ clientId: client.id })
-      clientAddress?.merge({ ...address })
-      clientAddress?.save()
+      client.related('address').updateOrCreate({ clientId: client.id }, { ...address })
     }
 
     if (phones) {
-      this.deleteAllPhones(client.id)
-      await this.insertPhones(client.id, phones)
+      const newPhones = phones.map((number: string) => ({ number }))
+      client.related('phones').updateOrCreate({ clientId: client.id }, newPhones)
     }
 
     await client.save()
@@ -100,14 +96,5 @@ export default class ClientsController {
     if (!client) throw new ClientNotFoundException()
 
     await client.delete()
-  }
-
-  private async deleteAllPhones(clientId: number) {
-    const phones = await Phone.findManyBy({ clientId })
-    phones.forEach((phone) => phone.delete())
-  }
-
-  private async insertPhones(clientId: number, phones: string[]) {
-    phones.map((number) => Phone.create({ clientId, number }))
   }
 }
